@@ -23,13 +23,18 @@ app.use(
 
 app.get('/', async (req, res) => {
   const ret = await pool.query("select * from sensing order by time desc limit 15");
-  res.send(ret[0]); 
+  res.send(ret[0]);
 })
 
 io.on("connection", async (socket) => {
     const ret = await pool.query("select * from sensing order by time desc limit 15");
     socket.emit("kfc", ret[0]);
   
+    // const interval = setInterval(async () => {
+    //   const newData = await pool.query("select * from sensing order by time desc limit 15");
+    //   socket.emit("kfc", newData[0]);
+    // }, 1000);
+
     socket.on("bbq", (arg) => {
       console.log(arg);
     })
